@@ -49,6 +49,23 @@ CREATE TABLE IF NOT EXISTS audit (
     id INTEGER PRIMARY KEY AUTOINCREMENT, at TEXT NOT NULL, actor TEXT NOT NULL,
     action TEXT NOT NULL, subject TEXT NOT NULL, details TEXT NOT NULL
 );
+CREATE TABLE IF NOT EXISTS corrections (
+    id TEXT PRIMARY KEY, source_id TEXT NOT NULL REFERENCES sources(id),
+    status TEXT NOT NULL,
+    previous_classification TEXT NOT NULL, proposed_classification TEXT NOT NULL,
+    proposed_fields TEXT NOT NULL, new_classification TEXT NOT NULL,
+    sensitive_fields TEXT NOT NULL, previous_sensitive_fields TEXT NOT NULL,
+    note TEXT NOT NULL, proposed_by TEXT NOT NULL, proposed_at TEXT NOT NULL,
+    reviewer TEXT, review_note TEXT, review_at TEXT, effective_at TEXT,
+    impact_snapshot TEXT
+);
+CREATE TABLE IF NOT EXISTS delivery_corrections (
+    correction_id TEXT NOT NULL REFERENCES corrections(id),
+    delivery_id TEXT NOT NULL REFERENCES deliveries(id),
+    original_determination TEXT NOT NULL, note TEXT NOT NULL,
+    recorded_at TEXT NOT NULL,
+    PRIMARY KEY(correction_id,delivery_id)
+);
 """
 
 

@@ -1,5 +1,6 @@
 from .audit import history
 from .catalog import Catalog
+from .corrections import Corrections
 from .db import connect
 from .delivery import Delivery
 from .grants import Grants
@@ -14,10 +15,14 @@ class Exchange:
         self.grants = Grants(self.connection)
         self.policies = Policies(self.connection)
         self.products = Products(self.connection)
+        self.corrections = Corrections(self.connection)
         self.delivery = Delivery(self.connection)
 
     def history(self, subject):
         return history(self.connection, subject)
+
+    def impact(self, correction_id):
+        return self.corrections.impact(correction_id)
 
     def close(self):
         self.connection.close()
